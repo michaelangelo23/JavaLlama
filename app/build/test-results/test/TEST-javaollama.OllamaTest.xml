@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="javaollama.OllamaTest" tests="2" skipped="1" failures="0" errors="0" timestamp="2025-11-16T15:56:16.697Z" hostname="NICHOLAS" time="45.104">
+  <properties/>
+  <testcase name="Server connection should work" classname="javaollama.OllamaTest" time="0.898"/>
+  <testcase name="Basic chat should return response" classname="javaollama.OllamaTest" time="44.204">
+    <skipped/>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+]]></system-err>
+</testsuite>

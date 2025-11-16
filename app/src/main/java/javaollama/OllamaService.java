@@ -1,22 +1,25 @@
 package javaollama;
 
-import io.github.ollama4j.OllamaAPI;
-import io.github.ollama4j.exceptions.OllamaBaseException;
+import io.github.ollama4j.Ollama;
+import io.github.ollama4j.exceptions.OllamaException;
 import io.github.ollama4j.models.response.OllamaResult;
+import io.github.ollama4j.models.generate.OllamaGenerateRequest;
+import io.github.ollama4j.models.request.ThinkMode;
+import io.github.ollama4j.utils.OptionsBuilder;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 
+// ollama API wrapper
 public class OllamaService {
     
-    private static final String OLLAMA_HOST = "http://localhost:11434";
-    private final OllamaAPI api;
+    private final Ollama api;
     private String modelName;
+    private ConversationHistory history;
     
     public OllamaService() {
-        this.api = new OllamaAPI(OLLAMA_HOST);
-        this.api.setRequestTimeoutSeconds(60);
+        this.api = new Ollama();
+        this.api.setRequestTimeoutSeconds(120);
+        this.history = new ConversationHistory();
     }
     
     public boolean isServerRunning() {
@@ -28,55 +31,100 @@ public class OllamaService {
         }
     }
     
-    public List<io.github.ollama4j.models.response.Model> getAvailableModels() {
-        try {
-            return api.listModels();
-        } catch (Exception e) {
-            return new java.util.ArrayList<>();
-        }
-    }
-    
     public void setModel(String modelName) {
         this.modelName = modelName;
     }
     
-    public String chat(String prompt) throws OllamaBaseException, IOException, InterruptedException {
-        OllamaResult result = api.generate(modelName, prompt, new HashMap<>());
+    // send prompt and get response
+    public String chat(String prompt) throws OllamaException, IOException, InterruptedException {
+        history.addUserMessage(prompt);
+        
+        OllamaResult result = api.generate(
+            OllamaGenerateRequest.builder()
+                .withModel(modelName)
+                .withPrompt(prompt)
+                .withRaw(false)
+                .withThink(ThinkMode.DISABLED)
+                .withOptions(new OptionsBuilder().setTemperature(0.7f).build())
+                .build(),
+            null);
+        
         String response = result.getResponse();
         
-        if (isEmpty(response) && hasThinking(result)) {
+        if (isEmpty(response) && result.getThinking() != null && !result.getThinking().isEmpty()) {
             response = parseThinkingResponse(result.getThinking());
+        } else if (!isEmpty(response)) {
+            response = cleanResponse(response);
         }
         
-        return response != null ? response : "";
+        String finalResponse = response != null ? response : "";
+        history.addAssistantMessage(finalResponse);
+        
+        return finalResponse;
+    }
+    
+    // clean up JSON responses
+    private String cleanResponse(String response) {
+        String trimmed = response.trim();
+        
+        if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+            String extracted = tryParseJsonResponse(trimmed);
+            if (!extracted.equals(trimmed)) {
+                return extracted;
+            }
+            
+            // try extracting from weird {"text": value} format
+            try {
+                int firstQuote = trimmed.indexOf("\"");
+                int secondQuote = trimmed.indexOf("\"", firstQuote + 1);
+                if (firstQuote != -1 && secondQuote != -1) {
+                    String possibleResponse = trimmed.substring(firstQuote + 1, secondQuote);
+                    if (possibleResponse.length() > 10 && !possibleResponse.contains("_")) {
+                        return possibleResponse;
+                    }
+                }
+            } catch (Exception e) {
+            }
+        }
+        
+        return response;
+    }
+    
+    private String tryParseJsonResponse(String response) {
+        String trimmed = response.trim();
+        if (!trimmed.startsWith("{")) {
+            return response;
+        }
+        
+        String[] fields = {"response", "content", "text", "message", "answer"};
+        for (String field : fields) {
+            String extracted = extractJsonField(trimmed, field);
+            if (!isEmpty(extracted) && !extracted.equals(trimmed)) {
+                return extracted;
+            }
+        }
+        
+        return response;
     }
     
     private boolean isEmpty(String text) {
         return text == null || text.trim().isEmpty();
     }
     
-    private boolean hasThinking(OllamaResult result) {
-        return result.getThinking() != null && !result.getThinking().isEmpty();
-    }
-    
     private String parseThinkingResponse(String thinking) {
-        System.out.println("\n[Model is thinking...]");
-        
-        String[] fields = {"answer", "reasoning", "thoughts"};
+        String[] fields = {"text", "output", "answer"};
         for (String field : fields) {
             String extracted = extractJsonField(thinking, field);
             if (!isEmpty(extracted)) {
                 return extracted;
             }
         }
-        
         return thinking;
     }
     
     private String extractJsonField(String json, String fieldName) {
         try {
-            String searchKey = "\"" + fieldName + "\"";
-            int fieldStart = json.indexOf(searchKey);
+            int fieldStart = json.indexOf("\"" + fieldName + "\"");
             if (fieldStart == -1) return null;
             
             int colonIndex = json.indexOf(":", fieldStart);
@@ -105,11 +153,11 @@ public class OllamaService {
         return -1;
     }
     
-    public String getModelName() {
-        return modelName;
+    public ConversationHistory getHistory() {
+        return history;
     }
     
-    public OllamaAPI getAPI() {
-        return api;
+    public void clearHistory() {
+        history.clear();
     }
 }

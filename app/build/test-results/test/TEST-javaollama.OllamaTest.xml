@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="javaollama.OllamaTest" tests="2" skipped="1" failures="0" errors="0" timestamp="2025-11-16T15:56:16.697Z" hostname="NICHOLAS" time="45.104">
+<testsuite name="javaollama.OllamaTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-12-02T14:54:42.157Z" hostname="NICHOLAS" time="70.556">
   <properties/>
-  <testcase name="Server connection should work" classname="javaollama.OllamaTest" time="0.898"/>
-  <testcase name="Basic chat should return response" classname="javaollama.OllamaTest" time="44.204">
-    <skipped/>
-  </testcase>
+  <testcase name="Server connection should work" classname="javaollama.OllamaTest" time="1.293"/>
+  <testcase name="Basic chat should return response" classname="javaollama.OllamaTest" time="6.591"/>
+  <testcase name="ConversationHistory should add messages correctly" classname="javaollama.OllamaTest" time="0.004"/>
+  <testcase name="Empty prompt should still work" classname="javaollama.OllamaTest" time="0.272"/>
+  <testcase name="Conversation history should track messages" classname="javaollama.OllamaTest" time="31.19"/>
+  <testcase name="Multiple chats should maintain context" classname="javaollama.OllamaTest" time="22.074"/>
+  <testcase name="Clear history should remove all messages" classname="javaollama.OllamaTest" time="9.128"/>
   <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[SLF4J: No SLF4J providers were found.
-SLF4J: Defaulting to no-operation (NOP) logger implementation
-SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+  <system-err><![CDATA[SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
 ]]></system-err>
 </testsuite>

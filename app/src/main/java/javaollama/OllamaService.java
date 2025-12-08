@@ -5,8 +5,11 @@ DESCRIPTION : Service class for interacting with the Ollama language model
 AUTHOR     : Mickel Angelo Castoverde
 COPYRIGHT  : macastroverde 2025
 REVISION HISTORY
-Date:           By:             Description:
+Date:           By:                       Description:
 2025-12-03      Mickel Angelo Castoverde  Creation of the program
+2025-12-04      Mickel Angelo Castoverde  Centralized model name and added optimization options
+2025-12-04      Mickel Angelo Castoverde  added System Prompt
+2025-12-04      Mickel Angelo Castoverde  Optimized context window for generation speed (8192 -> 4096)
 ======================================================================
 */
 package javaollama;
@@ -21,16 +24,35 @@ import io.github.ollama4j.models.chat.OllamaChatResponseModel;
 import io.github.ollama4j.models.request.ThinkMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class OllamaService {
 
     private static final String DEFAULT_MODEL = "phi3.5:latest";
     private static final int TIMEOUT_SECONDS = 120;
+    private static final String SYSTEM_PROMPT = "You are a precise and efficient AI assistant. " +
+            "Your responses must be SHORT, ACCURATE, and strictly RELEVANT to the user's query. " +
+            "Analyze the provided PDF context deeply. " +
+            "Do not hallucinate or add external information not supported by the context. " +
+            "If the answer is not in the context, state that clearly and briefly.";
 
     private Ollama api;
     private String modelName;
     private ConversationHistory history;
     private String pdfContext;
+
+    /*
+     * ======================================================================
+     * METHOD NAME : getDefaultModel
+     * DESCRIPTION : Returns the default model name
+     * PRE-CONDITION : None
+     * POST-CONDITION : Returns the default model name string
+     * ======================================================================
+     */
+    public static String getDefaultModel() {
+        return DEFAULT_MODEL;
+    }
 
     /*
      * ======================================================================
@@ -230,6 +252,10 @@ public class OllamaService {
             history.addUserMessage(finalPrompt);
 
             List<OllamaChatMessage> messages = new ArrayList<>();
+
+            // Add System Prompt
+            messages.add(new OllamaChatMessage(OllamaChatMessageRole.SYSTEM, SYSTEM_PROMPT));
+
             for (ConversationHistory.Message msg : history.getMessages()) {
                 OllamaChatMessageRole role = msg.getRole().equalsIgnoreCase("user") ? OllamaChatMessageRole.USER
                         : OllamaChatMessageRole.ASSISTANT;
@@ -237,6 +263,19 @@ public class OllamaService {
             }
 
             OllamaChatRequest request = new OllamaChatRequest(modelName, ThinkMode.DISABLED, messages);
+
+            // performance options
+            Map<String, Object> options = new HashMap<>();
+            options.put("num_ctx", 4096);
+            options.put("num_batch", 2048);
+            options.put("temperature", 0.3);
+            options.put("top_k", 40);
+            options.put("top_p", 0.9);
+            options.put("repeat_penalty", 1.1);
+            options.put("num_predict", 512);
+            options.put("num_keep", 4096);
+
+            request.setOptions(options);
 
             // execute the chat request
             OllamaChatResult result = api.chat(request, new OllamaChatTokenHandler() {

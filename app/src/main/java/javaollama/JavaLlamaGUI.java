@@ -7,6 +7,7 @@ COPYRIGHT  : macastroverde 2025
 REVISION HISTORY
 Date:           By:             Description:
 2025-12-06      Mickel Angelo Castoverde  Creation of the program
+2025-12-08      Mickel Angelo Castoverde  Updated to use centralized model name from OllamaService
 ======================================================================
 */
 package javaollama;
@@ -24,7 +25,6 @@ import java.io.File;
 
 public class JavaLlamaGui extends Application {
 
-    private static final String MODEL_NAME = "qwen3-vl:2b";
     private OllamaService ollama;
     private PdfService pdfService;
     private OllamaServerManager serverManager;
@@ -73,7 +73,7 @@ public class JavaLlamaGui extends Application {
         topBar.setPadding(new Insets(5));
         topBar.setAlignment(Pos.CENTER_LEFT);
 
-        Label modelLabel = new Label("Model: " + MODEL_NAME);
+        Label modelLabel = new Label("Model: " + OllamaService.getDefaultModel());
         modelLabel.setStyle("-fx-font-weight: bold;");
 
         Button clearButton = new Button("Clear Chat");
@@ -199,13 +199,13 @@ public class JavaLlamaGui extends Application {
                     return;
                 }
 
-                ollama.setModel(MODEL_NAME);
+                ollama.setModel(OllamaService.getDefaultModel());
 
                 Platform.runLater(() -> {
                     statusLabel.setText("Connected");
                     statusLabel.setStyle("-fx-text-fill: green;");
                     sendButton.setDisable(false);
-                    appendToChat("System", "Ready with " + MODEL_NAME);
+                    appendToChat("System", "Ready with " + OllamaService.getDefaultModel());
                     writeOutput(); // demonstrates object output on startup
                 });
 
@@ -470,7 +470,7 @@ public class JavaLlamaGui extends Application {
      */
     public void writeOutput() {
         System.out.println("JavaLlamaGui Status:");
-        System.out.println("Model: " + MODEL_NAME);
+        System.out.println("Model: " + OllamaService.getDefaultModel());
         System.out.println("Status: " + statusLabel.getText());
     }
 

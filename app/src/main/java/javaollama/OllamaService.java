@@ -7,9 +7,9 @@ COPYRIGHT  : macastroverde 2025
 REVISION HISTORY
 Date:           By:                       Description:
 2025-12-03      Mickel Angelo Castoverde  Creation of the program
-2025-12-04      Mickel Angelo Castoverde  Centralized model name and added optimization options
+2025-12-04      Mickel Angelo Castoverde  made default model name and added optimization options
 2025-12-04      Mickel Angelo Castoverde  added System Prompt
-2025-12-04      Mickel Angelo Castoverde  Optimized context window for generation speed (8192 -> 4096)
+2025-12-04      Mickel Angelo Castoverde  optimized context window for generation speed (8192 -> 4096)
 ======================================================================
 */
 package javaollama;
@@ -31,11 +31,13 @@ public class OllamaService {
 
     private static final String DEFAULT_MODEL = "phi3.5:latest";
     private static final int TIMEOUT_SECONDS = 120;
-    private static final String SYSTEM_PROMPT = "You are a precise and efficient AI assistant. " +
-            "Your responses must be SHORT, ACCURATE, and strictly RELEVANT to the user's query. " +
-            "Analyze the provided PDF context deeply. " +
-            "Do not hallucinate or add external information not supported by the context. " +
-            "If the answer is not in the context, state that clearly and briefly.";
+    private static final String SYSTEM_PROMPT = "You are a direct and concise AI assistant. " +
+            "Answer ONLY the user's question effectively and briefly. " +
+            "Do NOT provide additional background, summaries, or 'Reference' sections unless asked. " +
+            "Stop immediately after answering.";
+
+    // Discretion: these is an AI generated system prompt since my directives did
+    // not work efficiently.
 
     private Ollama api;
     private String modelName;
@@ -274,6 +276,11 @@ public class OllamaService {
             options.put("repeat_penalty", 1.1);
             options.put("num_predict", 512);
             options.put("num_keep", 4096);
+
+            List<String> stopTokens = new ArrayList<>();
+            stopTokens.add("User:");
+            stopTokens.add("System:");
+            options.put("stop", stopTokens);
 
             request.setOptions(options);
 

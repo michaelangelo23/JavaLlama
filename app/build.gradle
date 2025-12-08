@@ -19,7 +19,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.12.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.16' // fix slf4j warning
-    implementation libs.guava
+
     
     implementation 'io.github.ollama4j:ollama4j:1.1.4' // ollama4j lib
     implementation 'org.apache.pdfbox:pdfbox:3.0.3' // apache pdfbox lib

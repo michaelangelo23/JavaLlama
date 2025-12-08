@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="javaollama.OllamaTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-12-08T05:18:07.549Z" hostname="NICHOLAS" time="2.257">
+<testsuite name="javaollama.OllamaTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-12-08T06:08:24.076Z" hostname="NICHOLAS" time="3.472">
   <properties/>
-  <testcase name="Server connection should work" classname="javaollama.OllamaTest" time="2.167"/>
-  <testcase name="Basic chat should return response" classname="javaollama.OllamaTest" time="0.024"/>
-  <testcase name="ConversationHistory should add messages correctly" classname="javaollama.OllamaTest" time="0.011"/>
-  <testcase name="Empty prompt should still work" classname="javaollama.OllamaTest" time="0.007"/>
-  <testcase name="Conversation history should track messages" classname="javaollama.OllamaTest" time="0.011"/>
-  <testcase name="Multiple chats should maintain context" classname="javaollama.OllamaTest" time="0.008"/>
-  <testcase name="Clear history should remove all messages" classname="javaollama.OllamaTest" time="0.008"/>
+  <testcase name="Server connection should work" classname="javaollama.OllamaTest" time="3.242"/>
+  <testcase name="Basic chat should return response" classname="javaollama.OllamaTest" time="0.161"/>
+  <testcase name="ConversationHistory should add messages correctly" classname="javaollama.OllamaTest" time="0.006"/>
+  <testcase name="Empty prompt should still work" classname="javaollama.OllamaTest" time="0.006"/>
+  <testcase name="Conversation history should track messages" classname="javaollama.OllamaTest" time="0.021"/>
+  <testcase name="Multiple chats should maintain context" classname="javaollama.OllamaTest" time="0.007"/>
+  <testcase name="Clear history should remove all messages" classname="javaollama.OllamaTest" time="0.007"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

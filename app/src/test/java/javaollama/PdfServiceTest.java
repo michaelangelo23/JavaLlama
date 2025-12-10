@@ -5,7 +5,7 @@ DESCRIPTION : Unit tests for the PdfService class
 AUTHOR     : Mickel Angelo Castoverde
 COPYRIGHT  : macastroverde 2025
 REVISION HISTORY
-Date:           By:             Description:
+Date:           By:                       Description:
 2025-12-06      Mickel Angelo Castoverde  Creation of the program
 ======================================================================
 */

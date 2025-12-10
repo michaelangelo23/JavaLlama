@@ -5,8 +5,10 @@ DESCRIPTION : Unit tests for the OllamaService class
 AUTHOR     : Mickel Angelo Castoverde
 COPYRIGHT  : macastroverde 2025
 REVISION HISTORY
-Date:           By:             Description:
-2025-12-06      Mickel Angelo Castoverde  Creation of the program
+Date:           By:                         Description:
+2025-12-03      Mickel Angelo Castoverde  Creation of the program
+2025-12-06      Mickel Angelo Castoverde  Added recent changes for testing
+
 ======================================================================
 */
 package javaollama;

@@ -31,13 +31,7 @@ public class OllamaService {
 
     private static final String DEFAULT_MODEL = "phi3.5:latest";
     private static final int TIMEOUT_SECONDS = 120;
-    private static final String SYSTEM_PROMPT = "You are a direct and concise AI assistant. " +
-            "Answer ONLY the user's question effectively and briefly. " +
-            "Do NOT provide additional background, summaries, or 'Reference' sections unless asked. " +
-            "Stop immediately after answering.";
-
-    // Discretion: these is an AI generated system prompt since my directives did
-    // not work efficiently.
+    private static final String SYSTEM_PROMPT = "You are a helpful AI assistant. Answer the user's questions directly and concisely.";
 
     private Ollama api;
     private String modelName;
@@ -280,6 +274,8 @@ public class OllamaService {
             List<String> stopTokens = new ArrayList<>();
             stopTokens.add("User:");
             stopTokens.add("System:");
+            stopTokens.add("Assistant:");
+            stopTokens.add("-----");
             options.put("stop", stopTokens);
 
             request.setOptions(options);

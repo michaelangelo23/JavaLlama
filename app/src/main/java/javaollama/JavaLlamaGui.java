@@ -482,6 +482,23 @@ public class JavaLlamaGui extends Application {
      * POST-CONDITION : Application launched
      * ======================================================================
      */
+    /*
+     * ======================================================================
+     * METHOD NAME : stop
+     * DESCRIPTION : Cleanup method called when application stops
+     * PRE-CONDITION : None
+     * POST-CONDITION : Server stopped and application exits
+     * ======================================================================
+     */
+    @Override
+    public void stop() throws Exception {
+        if (serverManager != null) {
+            serverManager.stopServer();
+        }
+        super.stop();
+        System.exit(0);
+    }
+
     public static void main(String[] args) {
         launch(args);
     }

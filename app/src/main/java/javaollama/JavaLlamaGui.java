@@ -165,6 +165,12 @@ public class JavaLlamaGui extends Application {
                 ollama = new OllamaService();
                 pdfService = new PdfService();
                 serverManager = new OllamaServerManager();
+                // Ensure server is stopped even if the program is killed via terminal (Ctrl+C)
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    if (serverManager != null) {
+                        serverManager.stopServer();
+                    }
+                }));
 
                 // Logic Moved to OllamaServerManager
                 serverManager.ensureServerRunning(ollama, status -> {

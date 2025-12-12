@@ -66,18 +66,25 @@ public class OllamaServerManager {
             System.out.println("Stopping Ollama server...");
             process.destroy();
             try {
-                // Wait up to 3 seconds for graceful shutdown
                 if (!process.waitFor(3, java.util.concurrent.TimeUnit.SECONDS)) {
-                    System.out.println("Ollama server did not stop gracefully. Forcing kill...");
                     process.destroyForcibly();
-                } else {
-                    System.out.println("Ollama server stopped.");
                 }
             } catch (InterruptedException e) {
                 process.destroyForcibly();
                 Thread.currentThread().interrupt();
             }
         }
+
+        // Force kill any lingering ollama processes (Windows only)
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            try {
+                new ProcessBuilder("taskkill", "/F", "/IM", "ollama.exe").start();
+            } catch (Exception e) {
+                // Ignore errors
+
+            }
+        }
+
     }
 
     /*

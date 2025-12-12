@@ -39,7 +39,9 @@ public class OllamaServerManager {
             ProcessBuilder pb = new ProcessBuilder("ollama", "serve");
             pb.redirectErrorStream(true);
             pb.inheritIO(); // to prevent buffer blocking by inheriting IO (fixing the process pause when
-                            // running the code) commenting pb.inheritIO() can also prevent displaying output in running gradle, only use for debugging
+                            // running the code)
+            // commenting pb.inheritIO() can also prevent displaying output in running
+            // gradle, only use for debugging
             this.process = pb.start();
 
             // give it a moment to start
@@ -61,7 +63,20 @@ public class OllamaServerManager {
      */
     public void stopServer() {
         if (process != null && process.isAlive()) {
+            System.out.println("Stopping Ollama server...");
             process.destroy();
+            try {
+                // Wait up to 3 seconds for graceful shutdown
+                if (!process.waitFor(3, java.util.concurrent.TimeUnit.SECONDS)) {
+                    System.out.println("Ollama server did not stop gracefully. Forcing kill...");
+                    process.destroyForcibly();
+                } else {
+                    System.out.println("Ollama server stopped.");
+                }
+            } catch (InterruptedException e) {
+                process.destroyForcibly();
+                Thread.currentThread().interrupt();
+            }
         }
     }
 

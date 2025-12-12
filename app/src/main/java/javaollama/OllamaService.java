@@ -261,14 +261,14 @@ public class OllamaService {
 
             // performance options
             Map<String, Object> options = new HashMap<>();
-            options.put("num_ctx", 4096);
+            options.put("num_ctx", 16384);
             options.put("num_batch", 2048);
             options.put("temperature", 0.3);
             options.put("top_k", 40);
             options.put("top_p", 0.9);
             options.put("repeat_penalty", 1.1);
             options.put("num_predict", 512);
-            options.put("num_keep", 4096);
+            options.put("num_keep", 16384);
 
             List<String> stopTokens = new ArrayList<>();
             stopTokens.add("User:");

@@ -46,8 +46,9 @@ public class OllamaServerManager {
         try {
             ProcessBuilder pb = new ProcessBuilder("ollama", "serve");
             pb.redirectErrorStream(true);
-            pb.inheritIO(); // to prevent buffer blocking by inheriting IO (fixing the process pause when
-                            // running the code)
+            // pb.inheritIO(); // to prevent buffer blocking by inheriting IO (fixing the
+            // process pause when
+            // running the code)
             this.process = pb.start();
 
             // give it a moment to start

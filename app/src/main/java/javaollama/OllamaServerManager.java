@@ -74,4 +74,41 @@ public class OllamaServerManager {
             process.destroy();
         }
     }
+
+    /*
+     * ======================================================================
+     * METHOD NAME : ensureServerRunning
+     * DESCRIPTION : Ensures the Ollama server is running and ready
+     * PRE-CONDITION : ollama service is initialized
+     * POST-CONDITION : Server is running and connected, or exception thrown
+     * ======================================================================
+     */
+    public void ensureServerRunning(OllamaService ollama, java.util.function.Consumer<String> statusCallback)
+            throws Exception {
+        // Initial check
+        if (ollama.isServerRunning()) {
+            statusCallback.accept("Server is running");
+            return;
+        }
+
+        // Server not running, attempt to start
+        statusCallback.accept("Starting Ollama server...");
+        if (!startServer()) {
+            throw new Exception("Could not start Ollama server process");
+        }
+
+        // Wait for server to become responsive
+        statusCallback.accept("Waiting for server...");
+        int attempts = 0;
+        while (attempts < 5) {
+            Thread.sleep(1000); // Wait 1 second between checks
+            if (ollama.isServerRunning()) {
+                statusCallback.accept("Server connected");
+                return;
+            }
+            attempts++;
+        }
+
+        throw new Exception("Server started but failed to respond after 5 seconds");
+    }
 }

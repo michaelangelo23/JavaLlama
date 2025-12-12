@@ -166,38 +166,14 @@ public class JavaLlamaGui extends Application {
                 pdfService = new PdfService();
                 serverManager = new OllamaServerManager();
 
-                // check server
-                if (!ollama.isServerRunning()) {
+                // Logic Moved to OllamaServerManager
+                serverManager.ensureServerRunning(ollama, status -> {
                     Platform.runLater(() -> {
-                        statusLabel.setText("Starting Ollama server...");
-                        appendToChat("System", "Ollama server not running. Attempting to start...");
+                        statusLabel.setText(status);
+                        // Optional: Log technical steps to chat if needed, or just keep it simple
+                        // appendToChat("System", status);
                     });
-
-                    if (!serverManager.startServer()) {
-                        Platform.runLater(() -> {
-                            statusLabel.setText("Failed to start server");
-                            statusLabel.setStyle("-fx-text-fill: red;");
-                            showAlert("Error", "Could not start Ollama server. Please start it manually.");
-                        });
-                        return;
-                    }
-
-                    Thread.sleep(3000); // wait for server
-                }
-
-                Platform.runLater(() -> {
-                    statusLabel.setText("Verifying server...");
-                    appendToChat("System", "Ollama server is running. Checking model availability...");
                 });
-
-                if (!ollama.isServerRunning()) {
-                    Platform.runLater(() -> {
-                        statusLabel.setText("Server not responding");
-                        statusLabel.setStyle("-fx-text-fill: red;");
-                        showAlert("Error", "Ollama server is not responding.");
-                    });
-                    return;
-                }
 
                 ollama.setModel(OllamaService.getDefaultModel());
 

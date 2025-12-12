@@ -1,7 +1,7 @@
 ﻿# JavaLlama
-
- Discretion: I used Copilot to analyze the codebase for any leftover files such as build artifacts, therefore included in the contributor.
-
+```bash
+ Discretion: I used Copilot Agent to analyze the codebase for any leftover files such as build artifacts and remove it, therefore included in the contributor.
+```
 ## Overview
 An AI chatbot program in Java for interacting with Ollama, a local Large Language Model (LLM) runner.
 The application enhances responses by retrieving text from user-provided documents and feeding this content into the model (Context Stuffing).
@@ -30,3 +30,4 @@ The application enhances responses by retrieving text from user-provided documen
 ./gradlew test
 
 ```
+

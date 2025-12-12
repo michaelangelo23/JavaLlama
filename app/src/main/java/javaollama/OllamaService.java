@@ -248,7 +248,7 @@ public class OllamaService {
 
             List<OllamaChatMessage> messages = new ArrayList<>();
 
-            // Add System Prompt
+            // add System Prompt
             messages.add(new OllamaChatMessage(OllamaChatMessageRole.SYSTEM, SYSTEM_PROMPT));
 
             for (ConversationHistory.Message msg : history.getMessages()) {

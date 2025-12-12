@@ -39,9 +39,7 @@ public class OllamaServerManager {
             ProcessBuilder pb = new ProcessBuilder("ollama", "serve");
             pb.redirectErrorStream(true);
             pb.inheritIO(); // to prevent buffer blocking by inheriting IO (fixing the process pause when
-                            // running the code)
-            // commenting pb.inheritIO() can also prevent displaying output in running
-            // gradle, only use for debugging
+                            // running the code) commenting pb.inheritIO() can also prevent displaying output in running gradle, only use for debugging
             this.process = pb.start();
 
             // give it a moment to start

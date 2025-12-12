@@ -24,14 +24,6 @@ public class OllamaServerManager {
     public OllamaServerManager() {
     }
 
-    /*
-     * ======================================================================
-     * METHOD NAME : startServer
-     * DESCRIPTION : Starts the ollama server process
-     * PRE-CONDITION : System has ollama installed
-     * POST-CONDITION : Returns true if server started, false otherwise
-     * ======================================================================
-     */
     private Process process;
 
     /*

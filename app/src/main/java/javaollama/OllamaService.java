@@ -19,8 +19,7 @@ import io.github.ollama4j.models.chat.OllamaChatMessage;
 import io.github.ollama4j.models.chat.OllamaChatMessageRole;
 import io.github.ollama4j.models.chat.OllamaChatRequest;
 import io.github.ollama4j.models.chat.OllamaChatResult;
-import io.github.ollama4j.models.chat.OllamaChatTokenHandler;
-import io.github.ollama4j.models.chat.OllamaChatResponseModel;
+
 import io.github.ollama4j.models.request.ThinkMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -281,11 +280,7 @@ public class OllamaService {
             request.setOptions(options);
 
             // execute the chat request
-            OllamaChatResult result = api.chat(request, new OllamaChatTokenHandler() {
-                @Override
-                public void accept(OllamaChatResponseModel response) {
-                    // streaming not implemented for this simple service
-                }
+            OllamaChatResult result = api.chat(request, response -> {
             });
 
             String responseText = result.getResponseModel().getMessage().getResponse();
